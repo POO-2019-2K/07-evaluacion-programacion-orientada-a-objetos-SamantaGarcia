@@ -56,8 +56,7 @@ export default class Homework{
     getMissingDays() {
         let oneDay = 24 * 60 * 60 * 1000;
         let differenceMs = this._deadline - new Date();
-        let missingD = Math.trunc((differenceMs / oneDay)+1);
-    
+        let missingD = Math.trunc((differenceMs / oneDay)+1);    
         return missingD;
     }
 }

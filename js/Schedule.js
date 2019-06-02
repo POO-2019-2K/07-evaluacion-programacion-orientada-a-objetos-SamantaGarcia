@@ -8,7 +8,7 @@ export default class Schedule{
     }
 
     _initTable(){
-
+        //localStorage.removeItem("Homework");
         var lsHomework = JSON.parse(localStorage.getItem("Homework"));
         if (lsHomework === null) {
             return;
@@ -34,17 +34,22 @@ export default class Schedule{
 
         cellName.style.color = "white";
         cellDeadline.style.color = "white";
-        cellMissingDay.style.color = "white";       
+        cellMissingDay.style.color = "white";
 
         let objHomework = {
             name : homework.name,
             deadline : homework.deadline
         }
         this._homeworks.push(objHomework);
+
+        this._homeworks.sort(function(a,b){
+            return new Date(a.deadline) - new Date(b.deadline);
+            
+          });
         console.log(this._homeworks);
         localStorage.setItem("Homework", JSON.stringify(this._homeworks));
 
-        this._addButtons(row, homework);
+        this._addButtons(row, homework);       
 
     }
 
