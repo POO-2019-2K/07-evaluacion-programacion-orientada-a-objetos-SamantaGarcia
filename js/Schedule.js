@@ -62,7 +62,7 @@ export default class Schedule{
         btnEdit.appendChild(iconEdit);
         btnEdit.className = "btn btn-outline-warning ";
         btnEdit.addEventListener("click", () => { 
-           //this._editRow(row, homework); //llamando al metodo de editar
+           this._editRow(row, homework); //llamando al metodo de editar
         }); 
 
       let iconDel = document.createElement("span");
@@ -79,6 +79,7 @@ export default class Schedule{
       row.cells[4].appendChild(btnDelete);
     }
 
+    //eliminar
     _deleteRow(row, homework){
       
         this._homeworks.splice(homework, 1);
@@ -89,4 +90,55 @@ export default class Schedule{
         return;          
     }
 
+    //editar
+    _editRow(row, homework){
+        //console.log(row, persona);
+        let inputName = document.createElement("input");
+        inputName.type = "text";
+        inputName.value = homework.name;
+
+        let inputDeadline = document.createElement("input");
+        inputDeadline.type = "date";
+        inputDeadline.value = homework.deadline;
+
+        row.cells[0].innerHTML = ""; //borrar la celda
+        row.cells[0].appendChild(inputName); //appendChild para crear un input através de una variable  
+
+        row.cells[1].innerHTML = "";
+        row.cells[1].appendChild(inputDeadline);
+
+        row.cells[2].innerHTML = "";
+
+         //crear botones
+
+         let iconSave = document.createElement("span");
+        iconSave.className = "fa fa-user-check";
+      //salvar
+    let btnSave = document.createElement("button");
+    btnSave.type = "button";
+    btnSave.appendChild(iconSave);
+    btnSave.className = "btn btn-outline-success";
+    row.cells[3].innerHTML = "";
+    row.cells[3].appendChild(btnSave);
+    btnSave.addEventListener("click", () => {
+      let newH ={
+        name : inputName.value,
+        deadline : inputDeadline.value
+      }
+      //this._saveEdit(row, persona,newP);
+    });
+
+    let iconCan = document.createElement("span");
+    iconCan.className = "fa fa-user-alt-slash";
+
+    let btnCancel = document.createElement("button");
+    btnCancel.type = "button";
+    btnCancel.appendChild(iconCan);
+    btnCancel.className = "btn btn-outline-danger";
+    row.cells[4].innerHTML = "";
+    row.cells[4].appendChild(btnCancel);
+    btnCancel.addEventListener("click", () => {
+      //this._cancelEdit(row, homework); //llamar metodo
+    });
+    }
 }
