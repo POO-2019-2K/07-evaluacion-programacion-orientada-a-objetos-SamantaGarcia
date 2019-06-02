@@ -72,12 +72,21 @@ export default class Schedule{
       btnDelete.appendChild(iconDel);
       btnDelete.className = "btn btn-outline-danger";
       btnDelete.addEventListener("click", () => { 
-         // this._deleteRow(row, homework); //llamando al metodo de editar
+         this._deleteRow(row, homework); //llamando al metodo de editar
       }); 
 
       row.cells[3].appendChild(btnEdit);
       row.cells[4].appendChild(btnDelete);
     }
 
+    _deleteRow(row, homework){
+      
+        this._homeworks.splice(homework, 1);
+        row.innerHTML = ""; 
+        localStorage.setItem("Homework", JSON.stringify(this._homeworks));
+       // console.log(this._personas);  
+       
+        return;          
+    }
 
 }
