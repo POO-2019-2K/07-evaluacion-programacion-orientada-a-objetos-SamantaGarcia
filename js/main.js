@@ -11,10 +11,12 @@ class Main{
                 let name = document.querySelector("#name").value;
                 let sDeadline = document.querySelector("#deadline").value;
                 sDeadline = sDeadline.split("-");
-                var deadline = new Date(sDeadline[0], sDeadline[1] - 1, sDeadline[2]);
+                var deadline = new Date(sDeadline[0], sDeadline[1]-1, sDeadline[2]);
+                let id = document.querySelector("#id").value;
 
     
                 let objHomework = {
+                    id : id,
                     name : name,
                     deadline : deadline
                 };

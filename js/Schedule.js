@@ -20,7 +20,28 @@ export default class Schedule{
         console.log(lsHomework);
     }
 
+    _findH(id){      
+        let find = -1;
+        this._homeworks.forEach((e, index) => {
+            if (e.id === id) {
+                find = index;
+                return;
+            }
+        });
+        return find;
+    }
+
     showInTable(homework){
+      let found = this._findH(homework.id);
+      if (found >= 0) {
+        Swal.fire({
+          type: "error",
+          title: "Error",
+          text: "This ID already exist" 
+        });
+        return;
+      }
+
         let row = this._tableSchedule.insertRow(-1);
         let cellName = row.insertCell(0);
         let cellDeadline = row.insertCell(1);
@@ -37,6 +58,7 @@ export default class Schedule{
         cellMissingDay.style.color = "white";
 
         let objHomework = {
+            id : homework.id,
             name : homework.name,
             deadline : homework.deadline
         }
@@ -80,13 +102,10 @@ export default class Schedule{
     }
 
     //eliminar
-    _deleteRow(row, homework){
-      
+    _deleteRow(row, homework){      
         this._homeworks.splice(homework, 1);
         row.innerHTML = ""; 
         localStorage.setItem("Homework", JSON.stringify(this._homeworks));
-       // console.log(this._personas);  
-       
         return;          
     }
 
@@ -122,10 +141,12 @@ export default class Schedule{
     row.cells[3].appendChild(btnSave);
     btnSave.addEventListener("click", () => {
       let newH ={
+        id : homework.id,
         name : inputName.value,
         deadline : inputDeadline.value
       }
-      //this._saveEdit(row, persona,newP);
+      console.log(newH);
+      this._saveEdit(row, homework,newH);
     });
 
     let iconCan = document.createElement("span");
@@ -138,7 +159,25 @@ export default class Schedule{
     row.cells[4].innerHTML = "";
     row.cells[4].appendChild(btnCancel);
     btnCancel.addEventListener("click", () => {
-      //this._cancelEdit(row, homework); //llamar metodo
+      this._cancelEdit(row, homework); //llamar metodo
     });
     }
+    _saveEdit(row, homework, newH){
+        let position = this._findH(homework.id);
+        this._homeworks[position] = newH;
+        localStorage.setItem("Homework", JSON.stringify(this._homeworks));
+  
+        this._cancelEdit(row, new Homework(newH));
+        console.log(row, homework, newH)
+    }
+  
+      _cancelEdit(row, homework){
+          row.cells[0].innerHTML = homework.name;
+          row.cells[1].innerHTML = homework.getDateAsString();
+          row.cells[2].innerHTML = homework.getMissingDays();
+      
+          row.cells[3].innerHTML = "";
+          row.cells[4].innerHTML = "";
+           this._addButtons(row, homework); //metodo de botones
+        }
 }

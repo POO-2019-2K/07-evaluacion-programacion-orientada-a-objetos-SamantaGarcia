@@ -1,7 +1,8 @@
 export default class Homework{
     constructor(homework){
+        this._id = homework.id;
         this._name = homework.name;
-        this._deadline = homework.deadline;
+        this._deadline = new Date(homework.deadline);
         this._months = [
             "Ene",
             "Feb",
@@ -16,6 +17,10 @@ export default class Homework{
             "Nov",
             "Dic"
         ];
+    }
+
+    get id(){
+        return this._id;
     }
 
     get name(){
