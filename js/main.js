@@ -3,7 +3,7 @@ import Homework from "./Homework.js"
 
 class Main{
     constructor(){
-        let list = new Schedule(document.querySelector("#tableSchedule"));
+        let list = new Schedule(document.querySelector("#tableC"));
 
         document.querySelector("#btnAdd").addEventListener("click", () =>{
             let form = document.querySelector("#form");
@@ -20,11 +20,18 @@ class Main{
                     name : name,
                     deadline : deadline
                 };
-                let homework = new Homework(objHomework);
-                list.showInTable(homework);
+                var homework = new Homework(objHomework);
+                list.showInTable(homework, true);
                
             }
             form.classList.add("was-validated");
+        });
+
+        document.querySelector("#sortByDate").addEventListener("click", () =>{
+            list.sortByDate();
+        });
+        document.querySelector("#sortByName").addEventListener("click", () =>{
+            list.sortByName();
         });
     }
 }

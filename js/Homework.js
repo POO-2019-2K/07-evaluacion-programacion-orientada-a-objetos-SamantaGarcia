@@ -31,22 +31,18 @@ export default class Homework{
         return this._deadline;
     }
 
-    _getNumberAs2Digits(number){
-        if (number < 10){
+    _getNumberAsTwoDigits(deadline){
+        if (deadline < 10){
         //se convierte en string
-        return "0"+number;
+        return "0"+ deadline;
         } 
-        return number;
+        return deadline;
     }
-    //Fechas para la edicion de estos
-    getDate(){
-        //descomposicion
-        let {deadline} = this;
-        let date = deadline.getFullYear() + "-" + 
-        this._getNumberAs2Digits(deadline.getMonth()+1) + "-" +
-        this._getNumberAs2Digits(deadline.getDate());
-        return date;
-    }
+    getDeadlineForDate() {
+        let { deadline } = this;
+        let date2 = this._getNumberAsTwoDigits(deadline.getDate()) + '-' + this._getNumberAsTwoDigits(deadline.getMonth() + 1) + '-' + this._getNumberAsTwoDigits(deadline.getFullYear());
+        return date2;
+      }
     //Fecha para cumpleaños 
     getDateAsString() {
         let date =

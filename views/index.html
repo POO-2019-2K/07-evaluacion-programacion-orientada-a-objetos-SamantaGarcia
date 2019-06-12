@@ -16,7 +16,8 @@
                 <nav class="navbar navbar-light trasparent" id="nav">
                         <a class="navbar-brand">Homework Schedule <button class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-calendar-plus"></i></button></a> 
                         <form class="form-inline">
-                        <button id="sortByDate" class="btn btn-outline-light my-2 my-sm-0" type="submit">Sort by name</button>
+                        <button id="sortByName" class="btn btn-outline-light my-2 my-sm-0" type="button">Sort by name</button>
+                        <button id="sortByDate" class="btn btn-outline-light my-2 my-sm-0" type="button">Sort by date</button>
                         </form>
                 </nav>
             </div> 
@@ -25,15 +26,18 @@
                 <div class="col-2"></div>
                 <div class="col-8">
                     <table class="table border" id="tableSchedule">
-                        <tr id="tableH">
-                            <td>Name</td>
-                            <td>Deadline</td>
-                            <td>Missing days</td>
-                            <td>Edit</td>
-                            <td>Delete</td>
-                        </tr>
-                        <tr id="tableC">
-                        </tr>
+                      <thead>
+                          <tr id="tableH">
+                              <td>Homework</td>
+                              <td>Deadline</td>
+                              <td>Missing days</td>
+                              <td>Edit</td>
+                              <td>Delete</td>
+                          </tr>
+                      </thead>
+                        <tbody id="tableC">
+                        </tbody>
+                        
                     </table>
                 </div>
                 <div class="col-2"></div>

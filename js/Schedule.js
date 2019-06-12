@@ -15,9 +15,8 @@ export default class Schedule{
         }
         lsHomework.forEach((e, index) =>{
             e.deadline = new Date (e.deadline);
-            this.showInTable(new Homework(e));
+            this.showInTable(new Homework(e), false);
         });
-        console.log(lsHomework);
     }
 
     _findH(id){      
@@ -31,8 +30,9 @@ export default class Schedule{
         return find;
     }
 
-    showInTable(homework){
-      let found = this._findH(homework.id);
+    showInTable(homework, isNew){
+      if (isNew) {
+        let found = this._findH(homework.id);
       if (found >= 0) {
         Swal.fire({
           type: "error",
@@ -41,8 +41,23 @@ export default class Schedule{
         });
         return;
       }
+      }     
+        this.showRow(homework);
 
-        let row = this._tableSchedule.insertRow(-1);
+        let objHomework = {
+            id : homework.id,
+            name : homework.name,
+            deadline : homework.deadline
+        }
+        this._homeworks.push(objHomework);
+        localStorage.setItem("Homework", JSON.stringify(this._homeworks));
+
+              
+
+    }
+
+    showRow(homework){
+      let row = this._tableSchedule.insertRow(-1);
         let cellName = row.insertCell(0);
         let cellDeadline = row.insertCell(1);
         let cellMissingDay = row.insertCell(2);        
@@ -56,23 +71,33 @@ export default class Schedule{
         cellName.style.color = "white";
         cellDeadline.style.color = "white";
         cellMissingDay.style.color = "white";
+        this._addButtons(row, homework); 
+    }
 
-        let objHomework = {
-            id : homework.id,
-            name : homework.name,
-            deadline : homework.deadline
-        }
-        this._homeworks.push(objHomework);
-
+    sortByDate(){  
         this._homeworks.sort(function(a,b){
-            return new Date(a.deadline) - new Date(b.deadline);
-            
-          });
-        console.log(this._homeworks);
-        localStorage.setItem("Homework", JSON.stringify(this._homeworks));
+          return a.deadline - b.deadline;
+            });
+            this._tableSchedule.innerHTML="";
+            this._homeworks.forEach((h) =>{
+              this.showRow(new Homework(h));
+            });
+      console.log(this._homeworks);
+    }
 
-        this._addButtons(row, homework);       
-
+    sortByName(){
+      this._homeworks.sort(function(a,b){
+        var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+            return -1 
+        if (nameA > nameB)
+            return 1
+        return 0 //default return value (no sorting)   
+      });
+        this._tableSchedule.innerHTML="";
+            this._homeworks.forEach((h) =>{
+              this.showRow(new Homework(h));
+      });
     }
 
     _addButtons(row, homework){
@@ -118,7 +143,7 @@ export default class Schedule{
 
         let inputDeadline = document.createElement("input");
         inputDeadline.type = "date";
-        inputDeadline.value = homework.deadline;
+        inputDeadline.value = homework.getDeadlineForDate();
 
         row.cells[0].innerHTML = ""; //borrar la celda
         row.cells[0].appendChild(inputName); //appendChild para crear un input através de una variable  
@@ -128,25 +153,27 @@ export default class Schedule{
 
         row.cells[2].innerHTML = "";
 
+        
          //crear botones
 
-         let iconSave = document.createElement("span");
+        let iconSave = document.createElement("span");
         iconSave.className = "fa fa-user-check";
-      //salvar
-    let btnSave = document.createElement("button");
-    btnSave.type = "button";
-    btnSave.appendChild(iconSave);
-    btnSave.className = "btn btn-outline-success";
-    row.cells[3].innerHTML = "";
-    row.cells[3].appendChild(btnSave);
-    btnSave.addEventListener("click", () => {
-      let newH ={
-        id : homework.id,
-        name : inputName.value,
-        deadline : inputDeadline.value
-      }
-      console.log(newH);
-      this._saveEdit(row, homework,newH);
+        //salvar
+        let btnSave = document.createElement("button");
+        btnSave.type = "button";
+        btnSave.appendChild(iconSave);
+        btnSave.className = "btn btn-outline-success";
+        row.cells[3].innerHTML = "";
+        row.cells[3].appendChild(btnSave);
+        btnSave.addEventListener("click", () => {
+
+        let newH ={
+          id : homework.id,
+          name : inputName.value,
+          deadline : inputDeadline.value
+        }
+        //console.log(newH);
+        this._saveEdit(row, homework,newH);
     });
 
     let iconCan = document.createElement("span");
@@ -163,19 +190,22 @@ export default class Schedule{
     });
     }
     _saveEdit(row, homework, newH){
+      let newD = newH.inputDeadline; 
         let position = this._findH(homework.id);
-        this._homeworks[position] = newH;
+        this._homeworks[position] = newH;      
+        let newD2 = newD.split("-");
+         newD = new Date(newD2[0], newD2[1]-1, newD2[2]);  
+        newH.inputDeadline = newD2; 
         localStorage.setItem("Homework", JSON.stringify(this._homeworks));
-  
-        this._cancelEdit(row, new Homework(newH));
-        console.log(row, homework, newH)
+        this._cancelEdit(row, new Homework(newH));      
+        
+        //console.log(row, homework, newH)
     }
   
       _cancelEdit(row, homework){
           row.cells[0].innerHTML = homework.name;
-          row.cells[1].innerHTML = homework.getDateAsString();
+          row.cells[1].innerHTML = homework.getDeadlineForDate();
           row.cells[2].innerHTML = homework.getMissingDays();
-      
           row.cells[3].innerHTML = "";
           row.cells[4].innerHTML = "";
            this._addButtons(row, homework); //metodo de botones
