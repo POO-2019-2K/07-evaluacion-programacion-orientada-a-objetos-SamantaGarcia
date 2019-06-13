@@ -40,7 +40,7 @@ export default class Homework{
     }
     getDeadlineForDate() {
         let { deadline } = this;
-        let date2 = this._getNumberAsTwoDigits(deadline.getDate()) + '-' + this._getNumberAsTwoDigits(deadline.getMonth() + 1) + '-' + this._getNumberAsTwoDigits(deadline.getFullYear());
+        let date2 = this._getNumberAsTwoDigits(deadline.getDate()) + '/' + this._getNumberAsTwoDigits(deadline.getMonth() + 1) + '/' + this._getNumberAsTwoDigits(deadline.getFullYear());
         return date2;
       }
     //Fecha para cumpleaños 

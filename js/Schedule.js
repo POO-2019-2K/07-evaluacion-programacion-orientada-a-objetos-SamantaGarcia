@@ -190,12 +190,12 @@ export default class Schedule{
     });
     }
     _saveEdit(row, homework, newH){
-      let newD = newH.inputDeadline; 
+        let newD = newH.deadline; 
         let position = this._findH(homework.id);
         this._homeworks[position] = newH;      
         let newD2 = newD.split("-");
-         newD = new Date(newD2[0], newD2[1]-1, newD2[2]);  
-        newH.inputDeadline = newD2; 
+        newD = new Date(newD2[0], newD2[1]-1, newD2[2]);  
+        newH.deadline = newD2; 
         localStorage.setItem("Homework", JSON.stringify(this._homeworks));
         this._cancelEdit(row, new Homework(newH));      
         
